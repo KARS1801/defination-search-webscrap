@@ -1,0 +1,101 @@
+<html>
+    <head>
+      <title>Definitions</title>
+
+      <!-- CSS only -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+
+
+      <style> 
+        #searchString {
+          width: 200px;
+          height: 50px;
+          box-sizing: border-box;
+          border: 2px solid #ccc;
+          border-radius: 4px;
+          font-size: 16px;
+          background-color: white;
+          padding: 12px 20px 12px 40px;
+          -webkit-transition: width 0.4s ease-in-out;
+          transition: width 0.4s ease-in-out;
+          display: block;
+          margin-right: auto;
+          margin-left: auto;
+          
+        }
+        
+        #searchString:focus {
+          width: 300px;
+        }
+
+        #srchbtn {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        #resultdisplay {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+        }
+
+        .wrapsrch {
+           position: absolute;
+           top: 30%;
+           margin: 0px;
+           padding: 0px;
+           width: 100%;
+        }
+        </style>
+
+
+
+
+
+
+    </head>
+    <body>
+
+        <div class="wrapsrch">
+            <input type="text" id="searchString" placeholder="Search ....">
+            <br>
+            <button type="submit" id="srchbtn" class="btn btn-primary btn-lg" onclick="search()"> Search </button><br>
+
+
+            <h2 id="resultdisplay"></h2>
+
+        </div>
+
+        
+
+
+
+        <script>
+
+        async function search() {
+            console.log("func called");
+            var searchstring = document.getElementById("searchString").value;
+            var tosend = JSON.stringify({"searchstring": searchstring});
+            console.log(tosend);
+            var xhttp = await new XMLHttpRequest();
+            xhttp.onreadystatechange = async function() {
+                console.log(this.readyState);
+                console.log(this.status);
+              if (this.readyState == 4 && this.status == 200) {
+                  console.log("inside");
+                var data = await this.responseText;
+                console.log(data);
+                document.getElementById("resultdisplay").innerHTML = data;
+             
+              }
+            };
+            await xhttp.open("POST", "http://127.0.0.1:3000/getdata", false);
+            await xhttp.setRequestHeader("Content-Type", "application/json");
+            await xhttp.send(tosend);
+
+        }
+        </script>
+    </body>
+</html>
